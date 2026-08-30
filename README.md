@@ -61,15 +61,17 @@ and logging is off. To customize either, create the file yourself:
 
 Run the built binary (or `go run ./cmd/tasky`) to open the TUI:
 
-| Key           | Action                          |
-| ------------- | -------------------------------- |
-| `up`/`k`      | Move cursor up                   |
-| `down`/`j`    | Move cursor down                 |
-| `enter`/space | Toggle the selected todo done    |
-| `n`           | Create a new todo                |
-| `d`           | Delete the selected todo         |
-| `h`           | Toggle hiding completed todos    |
-| `q`           | Quit                             |
+| Key            | Action                          |
+| -------------- | -------------------------------- |
+| `up`/`k`       | Move cursor up                   |
+| `down`/`j`     | Move cursor down                 |
+| `alt+up`       | Move the selected todo up        |
+| `alt+down`     | Move the selected todo down      |
+| `enter`/space  | Toggle the selected todo done    |
+| `n`            | Create a new todo                |
+| `d`            | Delete the selected todo         |
+| `h`            | Toggle hiding completed todos    |
+| `q`            | Quit                             |
 
 ## Roadmap
 

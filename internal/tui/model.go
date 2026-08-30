@@ -119,6 +119,26 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.cursor++
 			}
 
+		case "alt+up":
+			if m.cursor > 0 {
+				a, b := visible[m.cursor], visible[m.cursor-1]
+				m.tasks[a], m.tasks[b] = m.tasks[b], m.tasks[a]
+				if err := task.SaveAll(m.tasks, m.path); err != nil {
+					return m, tea.Quit
+				}
+				m.cursor--
+			}
+
+		case "alt+down":
+			if m.cursor < len(visible)-1 {
+				a, b := visible[m.cursor], visible[m.cursor+1]
+				m.tasks[a], m.tasks[b] = m.tasks[b], m.tasks[a]
+				if err := task.SaveAll(m.tasks, m.path); err != nil {
+					return m, tea.Quit
+				}
+				m.cursor++
+			}
+
 		case "enter", " ":
 			if m.cursor < len(visible) {
 				t := &m.tasks[visible[m.cursor]]
@@ -186,7 +206,7 @@ func (m Model) View() string {
 		if !m.showDone {
 			hideLabel = "show done"
 		}
-		b.WriteString(helpStyle.Render(fmt.Sprintf("up/down: move  enter/space: toggle done  n: new  d: delete  h: %s  q: quit", hideLabel)))
+		b.WriteString(helpStyle.Render(fmt.Sprintf("up/down: move  alt+up/down: reorder  enter/space: toggle done  n: new  d: delete  h: %s  q: quit", hideLabel)))
 	}
 
 	return b.String()
