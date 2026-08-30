@@ -129,7 +129,7 @@ go build ./cmd/tasky
 
 - [x] Task type with JSON persistence (`SaveAll`/`LoadAll`)
 - [x] Interactive TUI (built on [Bubble Tea](https://github.com/charmbracelet/bubbletea))
-- [ ] Sync tasks with Obsidian notes
+- [ ] Task groups
 
 ---
 
