@@ -14,6 +14,8 @@
 **Tasky** is a fast, keyboard-driven todo list that lives in your terminal — written in Go,
 backed by a plain JSON file, and (soon) synced straight into your Obsidian notes.
 
+This is my first project ever written in Go.
+
 > **Status:** task persistence and the interactive TUI work; Obsidian sync is not built yet.
 
 ![Tasky demo](assets/demo.gif)
