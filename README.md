@@ -1,4 +1,12 @@
-# tasky
+```
+███████   █████    █████   █     █  █     █
+   █     █     █  █        █    █    █   █
+   █     █     █  █        █   █      ███
+   █     ███████   █████   ████        █
+   █     █     █        █  █   █       █
+   █     █     █   █████   █    █      █
+```
+
 A simple CLI written in Go to keep track of all your todos and sync them across your notes in Obsidian.
 
 > **Status:** task persistence and the interactive TUI work; Obsidian sync is not built yet.
