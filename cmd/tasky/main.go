@@ -14,7 +14,12 @@ import (
 )
 
 func main() {
-	cfg, err := config.Load("C:/dev/projects/tasky/config.json")
+	cfgPath, err := config.DefaultPath()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	cfg, err := config.Load(cfgPath)
 	if err != nil {
 		log.Fatal(err)
 	}
