@@ -19,12 +19,14 @@ var (
 )
 
 type Model struct {
-	tasks    []task.Task
-	cursor   int
-	path     string
-	creating bool
-	input    textinput.Model
-	showDone bool
+	tasks     []task.Task
+	cursor    int
+	path      string
+	creating  bool
+	editing   bool
+	editIndex int
+	input     textinput.Model
+	showDone  bool
 }
 
 func NewModel(tasks []task.Task, path string) Model {
@@ -66,22 +68,28 @@ func (m Model) Init() tea.Cmd {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if m.creating {
+		if m.creating || m.editing {
 			switch msg.String() {
 			case "esc":
 				m.creating = false
+				m.editing = false
 				m.input.Reset()
 				m.input.Blur()
 
 			case "enter":
 				if text := strings.TrimSpace(m.input.Value()); text != "" {
-					m.tasks = append(m.tasks, task.Create(text))
+					if m.editing {
+						m.tasks[m.editIndex].Text = text
+					} else {
+						m.tasks = append(m.tasks, task.Create(text))
+						m.cursor = len(m.visible()) - 1
+					}
 					if err := task.SaveAll(m.tasks, m.path); err != nil {
 						return m, tea.Quit
 					}
-					m.cursor = len(m.visible()) - 1
 				}
 				m.creating = false
+				m.editing = false
 				m.input.Reset()
 				m.input.Blur()
 
@@ -104,6 +112,16 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.creating = true
 			m.input.Focus()
 			return m, textinput.Blink
+
+		case "e":
+			if m.cursor < len(visible) {
+				m.editing = true
+				m.editIndex = visible[m.cursor]
+				m.input.SetValue(m.tasks[m.editIndex].Text)
+				m.input.CursorEnd()
+				m.input.Focus()
+				return m, textinput.Blink
+			}
 
 		case "h":
 			m.showDone = !m.showDone
@@ -198,7 +216,7 @@ func (m Model) View() string {
 		fmt.Fprintf(&b, "%s%s %s\n", cursor, checkbox, text)
 	}
 
-	if m.creating {
+	if m.creating || m.editing {
 		fmt.Fprintf(&b, "\n%s\n", m.input.View())
 		b.WriteString(helpStyle.Render("enter: save  esc: cancel"))
 	} else {
@@ -206,7 +224,7 @@ func (m Model) View() string {
 		if !m.showDone {
 			hideLabel = "show done"
 		}
-		b.WriteString(helpStyle.Render(fmt.Sprintf("up/down: move  alt+up/down: reorder  enter/space: toggle done  n: new  d: delete  h: %s  q: quit", hideLabel)))
+		b.WriteString(helpStyle.Render(fmt.Sprintf("up/down: move  alt+up/down: reorder  enter/space: toggle done  n: new  e: edit  d: delete  h: %s  q: quit", hideLabel)))
 	}
 
 	return b.String()
