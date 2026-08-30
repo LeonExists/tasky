@@ -1,6 +1,8 @@
 package task
 
 import (
+	"os"
+
 	"tasky/internal/utils"
 )
 
@@ -22,9 +24,22 @@ func Create(title string, description string) Task {
 	return newTask
 }
 
-func Load(task Task) {
-	utils.Log("Successfully loaded task...")
-	utils.Log("Title: ", task.Title)
-	utils.Log("Description: ", task.Description)
-	utils.Log("Done: ", task.Done)
+func SaveAll(tasks []Task, path string) error {
+	if err := utils.WriteJSON(path, tasks); err != nil {
+		return err
+	}
+	utils.Log("Tasks saved successfully")
+	return nil
+}
+
+func LoadAll(path string) ([]Task, error) {
+	var tasks []Task
+	if err := utils.ReadJSON(path, &tasks); err != nil {
+		if os.IsNotExist(err) {
+			return []Task{}, nil
+		}
+		return nil, err
+	}
+	utils.Log("Tasks loaded successfully")
+	return tasks, nil
 }

@@ -1,3 +1,5 @@
 /tasky
 /tasky.exe
 *.exe
+config.json
+tasks.json
