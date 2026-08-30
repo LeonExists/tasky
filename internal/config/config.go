@@ -31,7 +31,6 @@ func Load(path string) (Config, error) {
 		if err := utils.WriteJSON(path, cfg); err != nil {
 			return Config{}, err
 		}
-		utils.Log("Config created with defaults")
 		return cfg, nil
 	} else if err != nil {
 		return Config{}, err
@@ -48,7 +47,6 @@ func Load(path string) (Config, error) {
 		}
 	}
 
-	utils.Log("Config loaded successfully")
 	return cfg, nil
 }
 
