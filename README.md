@@ -101,3 +101,8 @@ Run the built binary (or `go run ./cmd/tasky`) to open the TUI:
 - [x] Task type with JSON persistence (`SaveAll`/`LoadAll`)
 - [x] Interactive TUI (built on [Bubble Tea](https://github.com/charmbracelet/bubbletea))
 - [ ] Sync tasks with Obsidian notes
+
+---
+
+*Claude Code was used only to generate commit messages and README documentation for this
+project — all code was written by hand.*
