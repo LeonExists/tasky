@@ -9,16 +9,45 @@ A simple CLI written in Go to keep track of all your todos and sync them across 
 go build ./cmd/tasky
 ```
 
+## Installing
+
+To make the `tasky` command available in your terminal:
+
+```
+go install ./cmd/tasky
+```
+
+This builds the binary and drops it into your Go bin directory — `go env GOBIN` if set,
+otherwise `bin` inside `go env GOPATH` (`%USERPROFILE%\go\bin` by default on Windows).
+Make sure that directory is on your `PATH`:
+
+```
+# PowerShell (add to your $PROFILE to make it permanent)
+$env:Path += ";$(go env GOPATH)\bin"
+```
+
+```
+# bash/zsh (add to your shell rc file to make it permanent)
+export PATH="$PATH:$(go env GOPATH)/bin"
+```
+
+Once that's done, `tasky` runs from any directory.
+
 ## Configuration
 
-Tasky reads a `config.json` file that points it at where your tasks are stored and whether logging is enabled:
+Tasky looks for a config file at `~/.tasky/config.json` (`%USERPROFILE%\.tasky\config.json`
+on Windows). It's optional — with no config file, tasks are stored at `~/.tasky/tasks.json`
+and logging is off. To customize either, create the file yourself:
 
 ```json
 {
-  "tasksPath": "tasks.json",
+  "tasksPath": "C:/Users/you/.tasky/tasks.json",
   "logEnabled": true
 }
 ```
+
+- `tasksPath` — where your tasks are saved as JSON. Defaults to `~/.tasky/tasks.json`.
+- `logEnabled` — whether Tasky prints log messages while running. Defaults to `false`.
 
 ## Usage
 
