@@ -1,11 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
+
+	tea "github.com/charmbracelet/bubbletea"
 
 	"tasky/internal/config"
 	"tasky/internal/task"
-	"tasky/internal/utils"
+	"tasky/internal/tui"
 )
 
 func main() {
@@ -19,16 +23,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	t := task.Create("Test", "Description for my test task")
-	tasks = append(tasks, t)
-
-	if err := task.SaveAll(tasks, cfg.TasksPath); err != nil {
-		log.Fatal(err)
-	}
-
-	for _, loaded := range tasks {
-		utils.Log("Title: ", loaded.Title)
-		utils.Log("Description: ", loaded.Description)
-		utils.Log("Done: ", loaded.Done)
+	m := tui.NewModel(tasks, cfg.TasksPath)
+	if _, err := tea.NewProgram(m).Run(); err != nil {
+		fmt.Println("Error running Tasky:", err)
+		os.Exit(1)
 	}
 }
