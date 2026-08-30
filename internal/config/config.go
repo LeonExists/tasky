@@ -3,7 +3,8 @@ package config
 import "tasky/internal/utils"
 
 type Config struct {
-	TasksPath string `json:"tasksPath"`
+	TasksPath  string `json:"tasksPath"`
+	LogEnabled bool   `json:"logEnabled"`
 }
 
 func Load(path string) (Config, error) {

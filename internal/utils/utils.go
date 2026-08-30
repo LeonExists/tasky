@@ -9,6 +9,10 @@ import (
 // === Uitls Settings ===
 var logEnabled bool = true
 
+func SetLogEnabled(enabled bool) {
+	logEnabled = enabled
+}
+
 // === Logging ===
 func Log(args ...any) {
 	if !logEnabled {

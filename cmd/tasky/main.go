@@ -10,6 +10,7 @@ import (
 	"tasky/internal/config"
 	"tasky/internal/task"
 	"tasky/internal/tui"
+	"tasky/internal/utils"
 )
 
 func main() {
@@ -17,6 +18,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	utils.SetLogEnabled(cfg.LogEnabled)
 
 	tasks, err := task.LoadAll(cfg.TasksPath)
 	if err != nil {
