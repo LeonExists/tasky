@@ -32,6 +32,11 @@ func SaveAll(tasks []Task, path string) error {
 	return nil
 }
 
+func MarkDone(t *Task) {
+	t.Done = true
+	utils.Log("Task marked as done")
+}
+
 func LoadAll(path string) ([]Task, error) {
 	var tasks []Task
 	if err := utils.ReadJSON(path, &tasks); err != nil {
