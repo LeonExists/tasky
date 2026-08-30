@@ -7,15 +7,35 @@
    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝
 ```
 
-A simple CLI written in Go to keep track of all your todos and sync them across your notes in Obsidian.
+![Go Version](https://img.shields.io/badge/go-1.27%2B-00ADD8?logo=go&logoColor=white)
+![Built with Bubble Tea](https://img.shields.io/badge/built%20with-Bubble%20Tea-FF6AC1)
+![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)
+
+**Tasky** is a fast, keyboard-driven todo list that lives in your terminal — written in Go,
+backed by a plain JSON file, and (soon) synced straight into your Obsidian notes.
 
 > **Status:** task persistence and the interactive TUI work; Obsidian sync is not built yet.
 
-## Building
+![Tasky demo](assets/demo.gif)
 
-```
-go build ./cmd/tasky
-```
+## Contents
+
+- [Features](#features)
+- [Installing](#installing)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Uninstalling](#uninstalling)
+- [Building from source](#building-from-source)
+- [Roadmap](#roadmap)
+
+## Features
+
+- ⚡ **Instant TUI** — open `tasky` and you're looking at your list, no menus to click through
+- ⌨️ **Full keyboard control** — add, edit, reorder, complete, and delete todos without leaving the home row
+- 👁️ **Focus mode** — hide completed todos with a single keystroke when you just want to see what's left
+- 💾 **Plain JSON storage** — your tasks live in a human-readable file you can back up, sync, or script against
+- 🔧 **Configurable** — point Tasky at a custom tasks file and toggle logging from one small config file
+- 🔗 **Obsidian sync** — on the roadmap, so your todos and your notes can finally live in the same place
 
 ## Installing
 
@@ -57,6 +77,23 @@ stored at `~/.tasky/tasks.json` and logging off. Edit it to customize either:
 - `tasksPath` — where your tasks are saved as JSON. Defaults to `~/.tasky/tasks.json`.
 - `logEnabled` — whether Tasky prints log messages while running. Defaults to `false`.
 
+## Usage
+
+Run the built binary (or `go run ./cmd/tasky`) to open the TUI:
+
+| Key            | Action                          |
+| -------------- | -------------------------------- |
+| `up`/`k`       | Move cursor up                   |
+| `down`/`j`     | Move cursor down                 |
+| `alt+up`       | Move the selected todo up        |
+| `alt+down`     | Move the selected todo down      |
+| `enter`/space  | Toggle the selected todo done    |
+| `n`            | Create a new todo                |
+| `e`            | Edit the selected todo           |
+| `d`            | Delete the selected todo         |
+| `h`            | Toggle hiding completed todos    |
+| `q`            | Quit                             |
+
 ## Uninstalling
 
 To remove `tasky` completely — binary, config, and stored tasks:
@@ -80,21 +117,13 @@ This deletes the `tasky` binary from your Go bin directory and the `~/.tasky` di
 Go bin directory to your `PATH` just for `tasky`, remove that line from your shell
 profile too.
 
-## Usage
+## Building from source
 
-Run the built binary (or `go run ./cmd/tasky`) to open the TUI:
+If you just want a local binary without installing it onto your `PATH`:
 
-| Key            | Action                          |
-| -------------- | -------------------------------- |
-| `up`/`k`       | Move cursor up                   |
-| `down`/`j`     | Move cursor down                 |
-| `alt+up`       | Move the selected todo up        |
-| `alt+down`     | Move the selected todo down      |
-| `enter`/space  | Toggle the selected todo done    |
-| `n`            | Create a new todo                |
-| `d`            | Delete the selected todo         |
-| `h`            | Toggle hiding completed todos    |
-| `q`            | Quit                             |
+```
+go build ./cmd/tasky
+```
 
 ## Roadmap
 
@@ -104,5 +133,5 @@ Run the built binary (or `go run ./cmd/tasky`) to open the TUI:
 
 ---
 
-*Claude Code was used only to generate commit messages and README documentation for this
-project — all code was written by hand.*
+*Claude Code was used only to generate commit messages, README documentation, and the demo
+GIF for this project — all code was written by hand.*
