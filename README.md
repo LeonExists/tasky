@@ -57,6 +57,29 @@ and logging is off. To customize either, create the file yourself:
 - `tasksPath` — where your tasks are saved as JSON. Defaults to `~/.tasky/tasks.json`.
 - `logEnabled` — whether Tasky prints log messages while running. Defaults to `false`.
 
+## Uninstalling
+
+To remove `tasky` completely — binary, config, and stored tasks:
+
+```
+# PowerShell
+$bin = if (go env GOBIN) { go env GOBIN } else { "$(go env GOPATH)\bin" }
+Remove-Item "$bin\tasky.exe" -Force -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:USERPROFILE\.tasky"
+```
+
+```
+# bash/zsh
+bindir="$(go env GOBIN)"; [ -z "$bindir" ] && bindir="$(go env GOPATH)/bin"
+rm -f "$bindir/tasky"
+rm -rf ~/.tasky
+```
+
+This deletes the `tasky` binary from your Go bin directory and the `~/.tasky` directory
+(`%USERPROFILE%\.tasky` on Windows), which holds your config and tasks. If you added the
+Go bin directory to your `PATH` just for `tasky`, remove that line from your shell
+profile too.
+
 ## Usage
 
 Run the built binary (or `go run ./cmd/tasky`) to open the TUI:
