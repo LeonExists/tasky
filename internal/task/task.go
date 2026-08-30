@@ -7,16 +7,14 @@ import (
 )
 
 type Task struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Done        bool   `json:"done"`
+	Text string `json:"text"`
+	Done bool   `json:"done"`
 }
 
-func Create(title string, description string) Task {
+func Create(text string) Task {
 	newTask := Task{
-		Title:       title,
-		Description: description,
-		Done:        false,
+		Text: text,
+		Done: false,
 	}
 
 	utils.Log("Task created successfully")
