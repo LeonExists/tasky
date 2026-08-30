@@ -44,8 +44,8 @@ Once that's done, `tasky` runs from any directory.
 ## Configuration
 
 Tasky looks for a config file at `~/.tasky/config.json` (`%USERPROFILE%\.tasky\config.json`
-on Windows). It's optional — with no config file, tasks are stored at `~/.tasky/tasks.json`
-and logging is off. To customize either, create the file yourself:
+on Windows). If it doesn't exist, Tasky creates it on first run with the defaults — tasks
+stored at `~/.tasky/tasks.json` and logging off. Edit it to customize either:
 
 ```json
 {

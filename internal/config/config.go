@@ -23,6 +23,20 @@ func DefaultPath() (string, error) {
 }
 
 func Load(path string) (Config, error) {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		cfg, err := defaultConfig()
+		if err != nil {
+			return Config{}, err
+		}
+		if err := utils.WriteJSON(path, cfg); err != nil {
+			return Config{}, err
+		}
+		utils.Log("Config created with defaults")
+		return cfg, nil
+	} else if err != nil {
+		return Config{}, err
+	}
+
 	var cfg Config
 	if err := utils.ReadJSON(path, &cfg); err != nil {
 		return Config{}, err
@@ -36,4 +50,12 @@ func Load(path string) (Config, error) {
 
 	utils.Log("Config loaded successfully")
 	return cfg, nil
+}
+
+func defaultConfig() (Config, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return Config{}, err
+	}
+	return Config{TasksPath: filepath.Join(home, ".tasky", "tasks.json")}, nil
 }
