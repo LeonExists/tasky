@@ -25,13 +25,13 @@ func main() {
 	}
 	utils.SetLogEnabled(cfg.LogEnabled)
 
-	tasks, err := task.LoadAll(cfg.TasksPath)
+	groups, err := task.LoadGroups(cfg.TasksPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	m := tui.NewModel(tasks, cfg.TasksPath)
-	if _, err := tea.NewProgram(m).Run(); err != nil {
+	m := tui.NewModel(groups, cfg.TasksPath)
+	if _, err := tea.NewProgram(&m).Run(); err != nil {
 		fmt.Println("Error running Tasky:", err)
 		os.Exit(1)
 	}

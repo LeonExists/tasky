@@ -32,6 +32,7 @@ This is my first project ever written in Go.
 
 ## Features
 
+- **Task groups** — organize todos into named groups, switch between them, or view every group together with clear spacing between sections
 - ⚡ **Instant TUI** — open `tasky` and you're looking at your list, no menus to click through
 - ⌨️ **Full keyboard control** — add, edit, reorder, complete, and delete todos without leaving the home row
 - 👁️ **Focus mode** — hide completed todos with a single keystroke when you just want to see what's left
@@ -79,18 +80,39 @@ stored at `~/.tasky/tasks.json` and logging off. Edit it to customize either:
 - `tasksPath` — where your tasks are saved as JSON. Defaults to `~/.tasky/tasks.json`.
 - `logEnabled` — whether Tasky prints log messages while running. Defaults to `false`.
 
+Tasks are stored in named groups. Existing flat task files are automatically
+loaded into a `General` group, so upgrading does not lose existing todos. The
+grouped format looks like this:
+
+```json
+{
+  "groups": [
+    {
+      "name": "Personal",
+      "tasks": [
+        {"text": "Plan the weekend", "done": false}
+      ]
+    }
+  ]
+}
+```
+
 ## Usage
 
 Run the built binary (or `go run ./cmd/tasky`) to open the TUI:
 
 | Key            | Action                          |
 | -------------- | -------------------------------- |
+| `left`/`right` | Switch between task groups      |
+| `tab`          | Switch to the next task group   |
+| `a`/`0`        | Toggle the all-groups view      |
+| `c`/`g`        | Create a named task group       |
 | `up`/`k`       | Move cursor up                   |
 | `down`/`j`     | Move cursor down                 |
 | `alt+up`       | Move the selected todo up        |
 | `alt+down`     | Move the selected todo down      |
 | `enter`/space  | Toggle the selected todo done    |
-| `n`            | Create a new todo                |
+| `n`            | Create a new todo in the active group |
 | `e`            | Edit the selected todo           |
 | `d`            | Delete the selected todo         |
 | `h`            | Toggle hiding completed todos    |
@@ -129,9 +151,9 @@ go build ./cmd/tasky
 
 ## Roadmap
 
-- [x] Task type with JSON persistence (`SaveAll`/`LoadAll`)
+- [x] Task and group types with JSON persistence (`SaveGroups`/`LoadGroups`)
 - [x] Interactive TUI (built on [Bubble Tea](https://github.com/charmbracelet/bubbletea))
-- [ ] Task groups
+- [x] Task groups
 
 ---
 
