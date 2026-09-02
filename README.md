@@ -155,6 +155,13 @@ go build ./cmd/tasky
 - [x] Interactive TUI (built on [Bubble Tea](https://github.com/charmbracelet/bubbletea))
 - [x] Task groups
 
+### Planned features
+
+- [ ] Configurable task colors — define multiple named colors for task categories or priorities, such as rendering important tasks in red
+- [ ] Marker-based color rules — use a configurable special character or character combination, such as `!` or `!!`, to apply the matching color automatically
+
+**Task description:** Add configurable task colors by mapping special markers such as `!` or `!!` to user-defined colors, including a red highlight for important tasks, and render the result in the TUI.
+
 ---
 
 *Claude Code was used only to generate commit messages, README documentation, and the demo
