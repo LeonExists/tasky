@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/textinput"
@@ -801,7 +802,7 @@ func (m Model) writeTask(b *strings.Builder, ref taskRef, position int) {
 	fmt.Fprintf(b, "%s%s %s\n", cursor, checkbox, text)
 }
 
-func (m Model) writeGroup(b *strings.Builder, groupIndex int, position int, nameWidth int) {
+func (m Model) writeGroup(b *strings.Builder, groupIndex int, position int, nameWidth, openWidth, doneWidth int) {
 	group := m.groups[groupIndex]
 	cursor := "  "
 	if position == m.groupCursor {
@@ -814,22 +815,27 @@ func (m Model) writeGroup(b *strings.Builder, groupIndex int, position int, name
 	}
 	namePadding := strings.Repeat(" ", max(0, nameWidth-lipgloss.Width(group.Name)))
 	_, done, open := groupTaskCounts(group)
-	status := groupEnabledStyle.Render("enabled")
+	statusText := "enabled"
+	statusStyle := groupEnabledStyle
 	if groupIndex == m.activeGroup && !group.Disabled {
-		status = selectedGroupStyle.Render("current")
+		statusText = "current"
+		statusStyle = selectedGroupStyle
 	}
 	if group.Disabled {
-		status = disabledStyle.Render(" (disabled)")
+		statusText = "(disabled)"
+		statusStyle = disabledStyle
 	}
 	fmt.Fprintf(
 		b,
-		"%s%s%s  %s open  %s done  %s\n",
+		"%s%s%s  %*d open  %*d done  %s\n",
 		cursor,
 		name,
 		namePadding,
-		groupCountLabel(open, "task"),
-		groupCountLabel(done, "task"),
-		status,
+		openWidth,
+		open,
+		doneWidth,
+		done,
+		statusStyle.Render(statusText),
 	)
 }
 
@@ -846,11 +852,16 @@ func (m Model) renderGroupsView(b *strings.Builder) {
 	}
 
 	nameWidth := 0
+	openWidth := 1
+	doneWidth := 1
 	for _, groupIndex := range indices {
 		nameWidth = max(nameWidth, lipgloss.Width(m.groups[groupIndex].Name))
+		_, done, open := groupTaskCounts(m.groups[groupIndex])
+		openWidth = max(openWidth, len(strconv.Itoa(open)))
+		doneWidth = max(doneWidth, len(strconv.Itoa(done)))
 	}
 	for position, groupIndex := range indices {
-		m.writeGroup(b, groupIndex, position, nameWidth)
+		m.writeGroup(b, groupIndex, position, nameWidth, openWidth, doneWidth)
 	}
 }
 

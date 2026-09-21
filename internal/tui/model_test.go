@@ -355,7 +355,7 @@ func TestGroupsViewShowsOverviewAndTaskBreakdown(t *testing.T) {
 	requireContains(t, view, "3 tasks")
 	requireContains(t, view, "1 task done")
 	requireContains(t, view, "2 tasks open")
-	requireContains(t, view, "1 task open")
+	requireContains(t, view, "1 open")
 	requireContains(t, view, "current")
 	requireNotContains(t, view, "Someday")
 
@@ -363,6 +363,73 @@ func TestGroupsViewShowsOverviewAndTaskBreakdown(t *testing.T) {
 	view = model.View()
 	requireContains(t, view, "Someday")
 	requireContains(t, view, "(disabled)")
+}
+
+func TestGroupsViewAlignsTaskCountsAndStatuses(t *testing.T) {
+	model := NewModel([]task.Group{
+		{
+			Name: "A",
+			Tasks: []task.Task{
+				{Text: "open one"},
+				{Text: "done one", Done: true},
+				{Text: "done two", Done: true},
+			},
+		},
+		{Name: "Longer", Tasks: makeTasks(13, 3)},
+		{Name: "Paused", Disabled: true, Tasks: []task.Task{{Text: "later"}, {Text: "saved", Done: true}}},
+	}, filepath.Join(t.TempDir(), "tasks.json"))
+
+	updateKey(t, &model, keyRune("v"))
+	updateKey(t, &model, keyRune("h"))
+	view := model.View()
+
+	rows := map[string]string{}
+	for _, name := range []string{"A", "Longer", "Paused"} {
+		for _, line := range strings.Split(view, "\n") {
+			if strings.Contains(line, name) && strings.Contains(line, "open") && strings.Contains(line, "done") {
+				rows[name] = line
+				break
+			}
+		}
+		if rows[name] == "" {
+			t.Fatalf("could not find rendered row for %q:\n%s", name, view)
+		}
+	}
+
+	statusIndex := func(row string) int {
+		for _, marker := range []string{"current", "enabled", "(disabled)"} {
+			if index := strings.Index(row, marker); index >= 0 {
+				return index
+			}
+		}
+		return -1
+	}
+
+	openIndex := strings.Index(rows["A"], "open")
+	doneIndex := strings.Index(rows["A"], "done")
+	statusColumn := statusIndex(rows["A"])
+	for _, name := range []string{"Longer", "Paused"} {
+		if got := strings.Index(rows[name], "open"); got != openIndex {
+			t.Fatalf("open column for %q starts at %d, want %d:\n%s", name, got, openIndex, rows[name])
+		}
+		if got := strings.Index(rows[name], "done"); got != doneIndex {
+			t.Fatalf("done column for %q starts at %d, want %d:\n%s", name, got, doneIndex, rows[name])
+		}
+		if got := statusIndex(rows[name]); got != statusColumn {
+			t.Fatalf("status column for %q starts at %d, want %d:\n%s", name, got, statusColumn, rows[name])
+		}
+	}
+}
+
+func makeTasks(open, done int) []task.Task {
+	tasks := make([]task.Task, 0, open+done)
+	for index := 0; index < open; index++ {
+		tasks = append(tasks, task.Task{Text: "open"})
+	}
+	for index := 0; index < done; index++ {
+		tasks = append(tasks, task.Task{Text: "done", Done: true})
+	}
+	return tasks
 }
 
 func TestCreatingGroupRecoversFromAllDisabledState(t *testing.T) {
