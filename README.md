@@ -1,74 +1,169 @@
+<div align="center">
+
+<img src="assets/tasky-banner.svg" alt="Tasky — Your terminal has a to-do list now." width="100%">
+
+[![Go 1.27+](https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white)](https://go.dev/)
+[![Bubble Tea](https://img.shields.io/badge/Bubble%20Tea-TUI-FF6AC1)](https://github.com/charmbracelet/bubbletea)
+[![Plain JSON](https://img.shields.io/badge/storage-plain%20JSON-69D2E7)](#data-and-configuration)
+[![macOS · Linux · Windows](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)](#quick-start)
+
+<br>
+
+<a href="#quick-start">Quick start</a> ·
+<a href="#controls">Controls</a> ·
+<a href="#data-and-configuration">Data</a> ·
+<a href="#roadmap">Roadmap</a>
+
+<br><br>
+
+<img src="assets/tasky-demo.gif" alt="Animated Tasky demo showing the Tasks and Groups views in a terminal" width="900">
+
+<sub>Tasks, groups, and keyboard shortcuts — right where your cursor already lives.</sub>
+
+</div>
+
+For the task you remembered halfway through a `git commit`.
+
+Tasky is a terminal todo list written in Go. It opens straight into your list,
+keeps tasks in named groups, and saves everything to a human-readable JSON file.
+Your side projects, grocery list, and ambitious weekend plans are welcome here.
+
+[Watch or download the MP4](assets/tasky-demo.mp4) ·
+[How the demo is made](scripts/demo/README.md)
+
+## Quick start
+
+```bash
+git clone https://github.com/LeonExists/tasky.git
+cd tasky
+go install ./cmd/tasky
+tasky
 ```
-████████╗ █████╗ ███████╗██╗  ██╗██╗   ██╗
-╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝╚██╗ ██╔╝
-   ██║   ███████║███████╗█████╔╝  ╚████╔╝ 
-   ██║   ██╔══██║╚════██║██╔═██╗   ╚██╔╝  
-   ██║   ██║  ██║███████║██║  ██╗   ██║   
-   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝
+
+Prefer trying it without installing?
+
+```bash
+go run ./cmd/tasky
 ```
 
-![Go Version](https://img.shields.io/badge/go-1.27%2B-00ADD8?logo=go&logoColor=white)
-![Built with Bubble Tea](https://img.shields.io/badge/built%20with-Bubble%20Tea-FF6AC1)
-![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)
+Tasky requires Go 1.27 or newer. `go install` places the binary in `GOBIN` when
+it is set, otherwise in `GOPATH/bin`. Add that directory to your `PATH` if your
+shell cannot find `tasky` after installation.
 
-**Tasky** is a fast, keyboard-driven todo list that lives in your terminal — written in Go,
-backed by a plain JSON file, and (soon) synced straight into your Obsidian notes.
+After pulling source changes, run `go install ./cmd/tasky` again to refresh the
+installed binary.
 
-This is my first project ever written in Go.
+<details>
+<summary>Make the installed command available on your PATH</summary>
 
-> **Status:** task persistence and the interactive TUI work; Obsidian sync is not built yet.
+PowerShell (add the lines to your `$PROFILE` to make them persistent):
 
-![Tasky demo](assets/demo.gif)
+```powershell
+$goBin = go env GOBIN
+if (-not $goBin) { $goBin = Join-Path (go env GOPATH) "bin" }
+$env:Path += ";$goBin"
+```
 
-## Contents
+bash/zsh (add the export to your shell rc file to make it persistent):
 
-- [Features](#features)
-- [Installing](#installing)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Uninstalling](#uninstalling)
-- [Building from source](#building-from-source)
-- [Roadmap](#roadmap)
+```bash
+gobin="$(go env GOBIN)"
+if [ -z "$gobin" ]; then gobin="$(go env GOPATH)/bin"; fi
+export PATH="$PATH:$gobin"
+```
+
+</details>
 
 ## Features
 
-- **Task groups** — organize todos into named groups, switch between them, or view every group together with clear spacing between sections
-- ⚡ **Instant TUI** — open `tasky` and you're looking at your list, no menus to click through
-- ⌨️ **Full keyboard control** — add, edit, reorder, complete, and delete todos without leaving the home row
-- 👁️ **Focus mode** — hide completed todos with a single keystroke when you just want to see what's left
-- 💾 **Plain JSON storage** — your tasks live in a human-readable file you can back up, sync, or script against
-- 🔧 **Configurable** — point Tasky at a custom tasks file and toggle logging from one small config file
-- 🔗 **Obsidian sync** — on the roadmap, so your todos and your notes can finally live in the same place
+- **Two focused views.** Tasks is the checklist; Groups is where you organize,
+  rename, reorder, and hide it.
+- **Keyboard first.** Add, edit, complete, reorder, and remove without leaving
+  the terminal.
+- **Hide without deleting.** Disable a group to remove it from the Tasks view
+  while keeping every task safely in the JSON file.
+- **Plain persistence.** Your data is readable, portable, and easy to back up
+  or script against.
+- **No ceremony.** Launch `tasky`, see your list, and start moving.
 
-## Installing
+## The two views
 
-To make the `tasky` command available in your terminal:
+### Tasks view
 
-```
-go install ./cmd/tasky
-```
+This is the default view. Work inside one enabled group, cycle through groups,
+or switch to the all-groups view. Disabled groups never appear in Tasks view
+navigation or in the all-groups view.
 
-This builds the binary and drops it into your Go bin directory — `go env GOBIN` if set,
-otherwise `bin` inside `go env GOPATH` (`%USERPROFILE%\go\bin` by default on Windows).
-Make sure that directory is on your `PATH`:
+### Groups view
 
-```
-# PowerShell (add to your $PROFILE to make it permanent)
-$env:Path += ";$(go env GOPATH)\bin"
-```
+Press `v` to switch views. Here you can create, rename, reorder, delete, and
+enable or disable groups. Disabled groups are hidden by default; press `h` to
+show them again. Their tasks stay saved and reappear when you enable the group;
+deleting the group deliberately removes them. The view also shows total group
+and task counts, open/done counts for each group, and which group is current.
 
-```
-# bash/zsh (add to your shell rc file to make it permanent)
-export PATH="$PATH:$(go env GOPATH)/bin"
-```
+### The someday list can wait
 
-Once that's done, `tasky` runs from any directory.
+Give a side quest a day off. Hide a whole group and bring it back when you have
+room for it:
 
-## Configuration
+1. Press `v` to open Groups view and select a group.
+2. Press `enter` to disable it; its tasks leave Tasks view immediately.
+3. Press `h` to reveal disabled groups, then select the group again.
+4. Press `enter` to restore it. The tasks are still there.
 
-Tasky looks for a config file at `~/.tasky/config.json` (`%USERPROFILE%\.tasky\config.json`
-on Windows). If it doesn't exist, Tasky creates it on first run with the defaults — tasks
-stored at `~/.tasky/tasks.json` and logging off. Edit it to customize either:
+## Controls
+
+### Tasks view
+
+| Key | Action |
+| --- | --- |
+| `left` / `[` / `shift+tab` | Previous enabled group |
+| `right` / `]` / `tab` | Next enabled group |
+| `a` / `0` | Toggle the all-enabled-groups view |
+| `c` / `g` | Create a named group |
+| `up` / `k` | Move the task cursor up |
+| `down` / `j` | Move the task cursor down |
+| `alt+up` | Move the selected task up |
+| `alt+down` | Move the selected task down |
+| `enter` / `space` | Toggle the selected task done |
+| `n` | Create a task in the active group (or the selected task's group in all-groups view) |
+| `e` | Edit the selected task |
+| `d` | Delete the selected task immediately |
+| `h` | Show or hide completed tasks |
+| `v` | Switch to Groups view |
+| `q` / `ctrl+c` | Quit |
+
+### Groups view
+
+| Key | Action |
+| --- | --- |
+| `up` / `k` | Move the group selection up |
+| `down` / `j` | Move the group selection down |
+| `n` / `c` / `g` | Create a named group |
+| `e` | Rename the selected group |
+| `d` | Start deleting the selected group and its tasks |
+| `y` / `enter` | Confirm a pending group deletion |
+| `n` / `esc` | Cancel a pending group deletion |
+| `alt+up` | Move the selected group up |
+| `alt+down` | Move the selected group down |
+| `enter` / `space` | Enable or disable the selected group |
+| `h` | Show or hide disabled groups (hidden by default) |
+| `v` | Switch to Tasks view |
+| `q` / `ctrl+c` | Quit |
+
+Deleting a group also deletes all of its tasks, so Tasky asks for confirmation.
+Deleting the last group restores an empty enabled `General` group. Task deletion
+from Tasks view is immediate.
+
+## Data and configuration
+
+<details>
+<summary>Configuration file</summary>
+
+Tasky looks for `~/.tasky/config.json` (`%USERPROFILE%\.tasky\config.json` on
+Windows). If it does not exist, Tasky creates it with the default task path and
+logging disabled.
 
 ```json
 {
@@ -77,12 +172,15 @@ stored at `~/.tasky/tasks.json` and logging off. Edit it to customize either:
 }
 ```
 
-- `tasksPath` — where your tasks are saved as JSON. Defaults to `~/.tasky/tasks.json`.
-- `logEnabled` — whether Tasky prints log messages while running. Defaults to `false`.
+- `tasksPath` — where tasks are saved. Defaults to `~/.tasky/tasks.json`.
+- `logEnabled` — whether Tasky prints log messages while running. Defaults to
+  `false`.
 
-Tasks are stored in named groups. Existing flat task files are automatically
-loaded into a `General` group, so upgrading does not lose existing todos. The
-grouped format looks like this:
+</details>
+
+### Persistence format
+
+Groups and task order are preserved in the JSON file:
 
 ```json
 {
@@ -92,77 +190,79 @@ grouped format looks like this:
       "tasks": [
         {"text": "Plan the weekend", "done": false}
       ]
+    },
+    {
+      "name": "Archive",
+      "disabled": true,
+      "tasks": [
+        {"text": "Keep this for later", "done": true}
+      ]
     }
   ]
 }
 ```
 
-## Usage
+The optional `disabled` property is written only for disabled groups. A missing
+property, or `"disabled": false`, means enabled. Grouped files from older
+versions therefore load as enabled, and older flat task arrays are automatically
+placed in an enabled `General` group so existing todos are not lost.
 
-Run the built binary (or `go run ./cmd/tasky`) to open the TUI:
+## Build from source
 
-| Key            | Action                          |
-| -------------- | -------------------------------- |
-| `left`/`right` | Switch between task groups      |
-| `tab`          | Switch to the next task group   |
-| `a`/`0`        | Toggle the all-groups view      |
-| `c`/`g`        | Create a named task group       |
-| `up`/`k`       | Move cursor up                   |
-| `down`/`j`     | Move cursor down                 |
-| `alt+up`       | Move the selected todo up        |
-| `alt+down`     | Move the selected todo down      |
-| `enter`/space  | Toggle the selected todo done    |
-| `n`            | Create a new todo in the active group |
-| `e`            | Edit the selected todo           |
-| `d`            | Delete the selected todo         |
-| `h`            | Toggle hiding completed todos    |
-| `q`            | Quit                             |
-
-## Uninstalling
-
-To remove `tasky` completely — binary, config, and stored tasks:
-
-```
-# PowerShell
-$bin = if (go env GOBIN) { go env GOBIN } else { "$(go env GOPATH)\bin" }
-Remove-Item "$bin\tasky.exe" -Force -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$env:USERPROFILE\.tasky"
-```
-
-```
-# bash/zsh
-bindir="$(go env GOBIN)"; [ -z "$bindir" ] && bindir="$(go env GOPATH)/bin"
-rm -f "$bindir/tasky"
-rm -rf ~/.tasky
-```
-
-This deletes the `tasky` binary from your Go bin directory and the `~/.tasky` directory
-(`%USERPROFILE%\.tasky` on Windows), which holds your config and tasks. If you added the
-Go bin directory to your `PATH` just for `tasky`, remove that line from your shell
-profile too.
-
-## Building from source
-
-If you just want a local binary without installing it onto your `PATH`:
-
-```
+```bash
 go build ./cmd/tasky
 ```
 
+The resulting binary can be run from the repository, or installed with
+`go install ./cmd/tasky` as shown above.
+
+<details>
+<summary>Uninstall Tasky</summary>
+
+PowerShell:
+
+```powershell
+$goBin = go env GOBIN
+if (-not $goBin) { $goBin = Join-Path (go env GOPATH) "bin" }
+Remove-Item (Join-Path $goBin "tasky.exe") -Force -ErrorAction SilentlyContinue
+Remove-Item "$env:USERPROFILE\.tasky" -Recurse -Force -ErrorAction SilentlyContinue
+```
+
+bash/zsh:
+
+```bash
+gobin="$(go env GOBIN)"
+if [ -z "$gobin" ]; then gobin="$(go env GOPATH)/bin"; fi
+rm -f "$gobin/tasky"
+rm -rf ~/.tasky
+```
+
+This removes the binary, configuration, and saved tasks. If you added the Go
+binary directory to your `PATH` only for Tasky, remove that line from your
+shell profile too.
+
+</details>
+
 ## Roadmap
 
-- [x] Task and group types with JSON persistence (`SaveGroups`/`LoadGroups`)
-- [x] Interactive TUI (built on [Bubble Tea](https://github.com/charmbracelet/bubbletea))
-- [x] Task groups
+- [x] Named task groups with JSON persistence
+- [x] Interactive TUI built on [Bubble Tea](https://github.com/charmbracelet/bubbletea)
+- [x] Separate Tasks and Groups views
+- [x] Enable, disable, reorder, rename, and delete groups
+- [ ] Obsidian sync, so tasks and notes can live in the same place
+- [ ] Configurable task colors and marker-based color rules such as `!` or `!!`
 
-### Planned features
+## Contributing
 
-- [ ] Configurable task colors — define multiple named colors for task categories or priorities, such as rendering important tasks in red
-- [ ] Marker-based color rules — use a configurable special character or character combination, such as `!` or `!!`, to apply the matching color automatically
+Found a sharp edge or have an idea? Open an issue with the behavior you saw,
+or send a focused pull request with a small reproduction when possible.
 
-**Task description:** Add configurable task colors by mapping special markers such as `!` or `!!` to user-defined colors, including a red highlight for important tasks, and render the result in the TUI.
+## Origin
+
+Tasky is my first project ever written in Go. It grew from a simple idea:
+keep a fast, keyboard-driven todo list in the terminal.
 
 ---
 
-*Claude Code was used only to generate commit messages, README documentation, and the demo
-GIF for this project — all code was written by hand.*
+*Claude Code assisted with the original commit messages, README documentation, and
+demo GIF. Codex assisted with subsequent feature work and the current demo.*

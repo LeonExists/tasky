@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-labelledby="title description">
+  <title id="title">tasky: Your terminal has a to-do list now.</title>
+  <desc id="description">A dark terminal-inspired banner with cyan and pink accents, checkboxes, and the words Tasks, Groups, and Plain JSON.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#101826"/>
+      <stop offset="1" stop-color="#0b0e16"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#273446" stroke-width="0.6"/>
+    </pattern>
+  </defs>
+  <rect x="1" y="1" width="1278" height="398" rx="24" fill="url(#background)" stroke="#2a3547" stroke-width="2"/>
+  <rect x="2" y="2" width="1276" height="396" rx="23" fill="url(#grid)" opacity="0.34"/>
+  <g font-family="Consolas, 'Liberation Mono', monospace">
+    <circle cx="54" cy="40" r="5" fill="#ff6f91"/>
+    <circle cx="74" cy="40" r="5" fill="#e4ba71"/>
+    <circle cx="94" cy="40" r="5" fill="#5dd9c1"/>
+    <text x="118" y="46" fill="#8a9bb4" font-size="16">~/a-little-less-chaos</text>
+    <text x="57" y="103" fill="#66e3da" font-size="16" letter-spacing="3">A TODO LIST FOR YOUR TERMINAL</text>
+    <text x="51" y="235" fill="#eef3fc" font-size="146" font-weight="700" letter-spacing="-8">tasky<tspan fill="#66e3da">_</tspan></text>
+    <text x="59" y="285" fill="#c4cedf" font-size="26">Your terminal has a to-do list now.</text>
+    <g font-size="15">
+      <rect x="59" y="321" width="93" height="31" rx="7" fill="#153034" stroke="#275556"/>
+      <text x="75" y="342" fill="#7ce8df">TASKS</text>
+      <rect x="163" y="321" width="106" height="31" rx="7" fill="#30213c" stroke="#513250"/>
+      <text x="179" y="342" fill="#f1a5d3">GROUPS</text>
+      <text x="291" y="342" fill="#8191aa">Go + Bubble Tea + plain JSON</text>
+    </g>
+    <g transform="translate(865 89)">
+      <path d="M 10 35 L 268 35" stroke="#283748" stroke-width="2"/>
+      <text x="12" y="14" fill="#8496ae" font-size="15" letter-spacing="2">TODAY, PROBABLY</text>
+      <rect x="11" y="65" width="29" height="29" rx="6" fill="#173536" stroke="#66e3da" stroke-width="2"/>
+      <path d="M 18 79 L 24 85 L 34 73" fill="none" stroke="#66e3da" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="56" y="87" fill="#8fa5ad" font-size="22" text-decoration="line-through">ship the thing</text>
+      <rect x="11" y="124" width="29" height="29" rx="6" fill="#131c29" stroke="#6f829d" stroke-width="2"/>
+      <text x="56" y="146" fill="#e1e8f4" font-size="22">touch grass</text>
+      <rect x="11" y="183" width="29" height="29" rx="6" fill="#131c29" stroke="#6f829d" stroke-width="2"/>
+      <text x="56" y="205" fill="#e1e8f4" font-size="22">one more idea</text>
+      <path d="M 166 227 C 166 258 241 266 251 230" fill="none" stroke="#e899c6" stroke-width="2" stroke-dasharray="5 6"/>
+      <text x="29" y="258" fill="#e899c6" font-size="16">save it for later.</text>
+    </g>
+  </g>
+</svg>

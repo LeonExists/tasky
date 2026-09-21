@@ -1,0 +1,4 @@
+frames.json
+contact-*.png
+*.pyc
+__pycache__/

@@ -15,8 +15,9 @@ type Task struct {
 }
 
 type Group struct {
-	Name  string `json:"name"`
-	Tasks []Task `json:"tasks"`
+	Name     string `json:"name"`
+	Tasks    []Task `json:"tasks"`
+	Disabled bool   `json:"disabled,omitempty"`
 }
 
 const DefaultGroupName = "General"
